@@ -1,32 +1,36 @@
-## What data professionals need to know about uv.
+# What data professionals need to know about uv
 
-uv is all the rage. And with good reason. uv solves a slew of headaches and saves time. However, when I polled a class of data professionals, only a few of them had tried it.
+uv is all the rage. It helps you reduce the pain of Python virtual environment management, slow package installs, and unreproducible environments. 
+
+Although uv solves a slew of headaches for Python users it's still in its early days. Although there is a lot of buzz around uv, when I polled a class of data professionals, only a few of them had tried it. 
+
+![Zoolander Mugato meme saying uv so hot right now](img2.jpg)
 
 As a data professional you can use uv to save time and money. Let's see how.
 
-![Zoolander Mugato meme saying uv so hot right now](image-2.png)
+## The current situation
 
-## Goals: reduce the pain of Python virtual environment management, slow package installs, and unreproducible environments
+Here's the landscape of existing popular tools.
 
-Python virtual environment management is a pain.
+First, you've got your default Python version managers: venv, virtualenv.
 
-You've got your default Python version managers: venv, virtualenv.
+Then, there's your snake-named virtual environment managers: conda, miniconda, mamba.
 
-Your snake-named virtual environment managers: conda, miniconda, mamba.
+Next, are your Python version managers: pyenv, tox.
 
-Your Python version managers: pyenv, tox.
+Plus, there are your Python package managers: pip, pipx, poetry.
 
-Your Python package managers: pip, pipx, poetry.
+Don't forget your package dependency version files: requirements.txt and pyproject.toml. And you've got tools such as pipx to help you use them.
 
-And your package dependency version managers: requirements.txt and pyproject.toml and then you've got tools such as pipx to help you use them.
+And that's a simplified list of the options! It ain't pretty.
 
-And thats a simplified list of the options. It ain't pretty.
+The worst part is that when the wires get crossed, it's a time suck. I was reminded of this not long ago. I've been a conda user for years (mamba flavor, lately). Recently, my `base`, default conda environment had some deep package dependency issues that caused tough-to-diagnose problems. I wanted to remove my `base` environment and start fresh, but you can't easily do that, at least not without risking breaking your entire setup. But reinstalling conda yet again and risking a case of "PATH issue-itis" isn't anyone's idea of a good time. 
 
-The worst part is that when things go wrong and the wires get crossed, it's a time suck. I was reminded of this a few weeks ago. I've been a conda user for years (mamba flavor, lately). Recently, my `base` (default) conda environment had some deep package dependency issues that caused tough-to-diagnose problems. I wanted to remove my `base` environment and start fresh, but you can't easily do that, at least not without risking breaking your entire setup. But reinstalling conda yet again and risking a case of the malady known as "PATH issue-itis" isn't anyone's idea of a good time. So I went searching for alternatives.
+That's what caused me to make the jump to uv.
 
 uv brings simplicity and speed to the chaos that is Python virtual environment and package management.
 
-## Goal: install uv so you can take advantage of its speed and simplicity
+## Goal: install uv so you can take advantage of it
 
 First, ensure you aren't already in a Python virtual environment. If you see parentheses around a word such as `(base)` in your terminal prompt, you probably are in a virtual environment. If it's a conda environment, exit it with `conda deactivate`. If it's a venv environment, exit it with `deactivate`. Run those commands until you don't see any parentheses in your prompt.
 
@@ -58,11 +62,11 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 For more assistance, see the [uv installation docs](https://docs.astral.sh/uv/getting-started/installation/).
 
-Let's use uv to speed up our work.
+Now that we have uv installed, let's use it!
 
 ## Goal: create a Python virtual environment that will stick around for future use
 
-The ux of uv is nice. It borrows from the syntax of popular tools.
+The ux of uv is lovely. It borrows from the syntax of popular tools.
 
 If you've used `venv` before, you'll feel right at home, just preface your usual virtual environment creation command with `uv` and specify the desired Python version - no need to use a tool such as `pyenv` to install and manage Python versions.
 
@@ -86,13 +90,13 @@ Let's install some Python packages.
 
 ## Goal: install packages really fast
 
-uv is orders of magnitude faster than pip when it comes to installing packages into your virtual environment. And the syntax is familiar if you're used to installing packages with pip. For example, to install the `prefect` package, just throw `uv` in front of your usual pip command like this:
+uv is orders of magnitude faster than pip when it comes to installing packages into your virtual environment. And the syntax is familiar if you're used to using pip. For example, to install the `prefect` package, just throw `uv` in front of your usual pip command like this:
 
 ```bash
 uv pip install prefect
 ```
 
-You upgrade a package and its dependencies with the same `-U` flag that you'd use with pip:
+You upgrade a package and its dependencies, you can use the same `-U` flag that you'd use with pip:
 
 ```bash
 uv pip install -U prefect
@@ -104,13 +108,13 @@ See the versions of all your installed packages with:
 uv pip list
 ```
 
-Now you've got a virtual environment and have installed packages into it. You build a useful project and everything works. Fantastic! Let's make this reproducible.
-
-Just a heads up, that I've found one gotcha with uv. Inside the virtual environment, you can't see the packages installed in the global Python environment.
+Now you've got a virtual environment and with the packages you need. Next, say you build a useful project and everything works. Fantastic! Let's make this reproducible.
 
 ## Goal: make a reproducible environment
 
-Let's install all the packages listed in a `requirements.txt` file with a single command.
+As with pip, you can use the `-r` flag with uv to install all the packages listed in a `requirements.txt` file with a single command.
+
+Say this is your file:
 
 ```requirements.txt
 polars
@@ -118,13 +122,13 @@ plotly
 prefect 
 ```
 
-As with pip, you can use the `-r` flag with uv to install all the packages listed in a `requirements.txt` file.
+Then just run the following command:
 
 ```bash
 uv pip install -r requirements.txt
 ```
 
-In the past, you might have used pip to specify top level package versions in your `requirements.txt` file.
+In the past, you might have specified top level package versions in your `requirements.txt` file.
 
 ```requirements.txt
 prefect==3.11.0
@@ -132,7 +136,7 @@ polars==0.7.3
 plotly==5.24.1
 ```
 
-That's a step toward reproducibility, but sometimes a dependency of one of the packages you've specified will change and break your project. We don't want that, so let's create a lock file that specifies the exact versions of all top-level packages and their dependencies, all the way down.
+That's a step further toward reproducibility, but sometimes a dependency of one of the packages you've specified will change and break your project. We don't want that, so let's create a lock file.
 
 uv can read a list of packages from one file and output a lock file that specifies the exact versions of all top-level packages and their dependencies - and their dependencies' dependencies, all the way down.
 
@@ -146,20 +150,18 @@ Now our `requirements.txt` file contains the exact versions of all the top level
 
 So what, you say? pipenv and poetry could do that, too? Fair enough, but let's talk about the need for speed.
 
-![uv is faster than pip](image-3.png) TK gif need for speed top gun
+![top gun need for speed fast install speed](needspeed.jpg)
 
 ## Goal: faster package installs in Docker
 
 Faster package installs shorten feedback loops, increase developer productivity, and speed up CI/CD pipelines, saving time and money.
 
-uv is written in the famously fast Rust language and takes advantage of clever optimizations to reduce package install times.
-
-That's great for many development scenarios. But much of the world runs on Docker.
+uv is written in the famously fast [Rust language](https://www.rust-lang.org/) and takes advantage of clever optimizations to reduce package install times.
 
 I saw over a 5x speedup by using uv vs. plain pip to install 17 Python packages in a Docker image build.
 7 seconds vs. 37 seconds. 🤯
 
-How can we get the speed and simplicity of uv in a Docker image?
+Running in Docker takes a little change. How can we get the speed and simplicity of uv in a Docker image?
 
 Just add:
 
@@ -179,11 +181,13 @@ to:
 RUN uv pip install --system my_package
 ```
 
-Or instead of making the change every time, just set the environment variable in your Dockerfile with:
+Or instead of making that change every time, just set the environment variable in your Dockerfile with:
 
 ```dockerfile
 ENV UV_SYSTEM_PYTHON=1
 ```
+
+Now for some very cool uv tricks.
 
 ## Goal: run a Python script in a single line in a disposable virtual environment with any needed packages
 
@@ -273,10 +277,12 @@ uv provides handy commands for working with your package.
 
 uv is the future and the present of Python virtual environment and package management.
 
+If you haven't yet tried uv, give it a chance to speed up your development workflows and save time running your CI/CD pipelines.
+
+At Prefect, we're using uv in more and more places and reaping the benefits.
+
 ### Additional resources
 
 - [uv docs](https://docs.astral.sh/uv/)
 - [Good YouTube video](https://www.youtube.com/watch?v=goIwKjsEPOI) on uv with emphasis on its project management features and the source of the stat above on uv's popularity.
 - [Nice uv guide](https://www.saaspegasus.com/guides/uv-deep-dive/).
-
-If you haven't yet tried uv, give it a chance to speed up your development workflows and save time running your CI/CD pipelines.
