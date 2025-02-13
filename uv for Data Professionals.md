@@ -1,14 +1,10 @@
-uv: One Python virtual environment and package manager to rule them all
+## What data professionals need to know about uv.
 
-![Frodo Lord of the Rings with the ring in hand outstretched](image-1.png)
+uv is all the rage. And with good reason. uv solves a slew of headaches and saves time. However, when I polled a class of data professionals, only a few of them had tried it.
 
-What data professionals need to know about uv.
-
-uv is all the rage. And with good reason. uv solves a slew of headaches and saves time. However, when I polled a class of data professionals, recently only a few of them had tried it.
+As a data professional you can use uv to save time and money. Let's see how.
 
 ![Zoolander Mugato meme saying uv so hot right now](image-2.png)
-
-As a data professional you use uv to save time and money. Let's see how.
 
 ## Goals: reduce the pain of Python virtual environment management, slow package installs, and unreproducible environments
 
