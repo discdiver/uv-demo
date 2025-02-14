@@ -208,7 +208,7 @@ uv run --with jupyter jupyter lab
 
 I wish this was a thing when I was learning Python.
 
-# Goal: run a file hosted on the web or in the clipboard
+## Goal: run a file hosted on the web or in the clipboard
 
 If your file paths are set up correctly, uv will auto-install the dependencies in a script and run them in a temporary virtual environment.
 
@@ -222,7 +222,7 @@ You can do the same thing with code in your clipboard on a Mac with this command
 pbpaste | uv run - 
 ```
 
-## Goal: project management
+## Goal: easier project management
 
 uv also solves pain points for project management. It helps you quickly start a project and provides handy commands for development. Create a project:
 
