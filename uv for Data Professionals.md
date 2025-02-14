@@ -154,22 +154,19 @@ So what, you say? pipenv and poetry could do that, too? Fair enough, but let's t
 
 ## Goal: faster package installs in Docker
 
-Faster package installs shorten feedback loops, increase developer productivity, and speed up CI/CD pipelines, saving time and money.
+Faster package installs shorten feedback loops, increase developer productivity, and speed up CI/CD pipelines, saving time, energy, and money.
 
 uv is written in the famously fast [Rust language](https://www.rust-lang.org/) and takes advantage of clever optimizations to reduce package install times.
 
-I saw over a 5x speedup by using uv vs. plain pip to install 17 Python packages in a Docker image build.
-7 seconds vs. 37 seconds. 🤯
+I saw over a 5x speedup when using uv as opposed to pip to install 17 Python packages in a Docker image build: 7 seconds vs. 37 seconds. 🤯
 
-Running in Docker takes a little change. How can we get the speed and simplicity of uv in a Docker image?
-
-Just add:
+Using uv to build a Docker image minor modifications. Just add:
 
 ```dockerfile
 COPY --from=ghcr .io/astral-sh/uv:latest /uv /uvx /bin/
 ```
 
-And change:
+and change:
 
 ```dockerfile
 RUN pip install my_package
@@ -181,15 +178,17 @@ to:
 RUN uv pip install --system my_package
 ```
 
-Or instead of making that change every time, just set the environment variable in your Dockerfile with:
+Or instead of specifying `--system` every time, set the environment variable in your Dockerfile with:
 
 ```dockerfile
 ENV UV_SYSTEM_PYTHON=1
 ```
 
-Now for some very cool uv tricks.
+Now let's see some almost magical uv tricks.
 
-## Goal: run a Python script in a single line in a disposable virtual environment with any needed packages
+## Goal: run a Python script in a single line in a disposable virtual environment 
+
+Use 
 
 ```bash
 uv run my_script.py
@@ -201,42 +200,38 @@ Need a package such as polars?
 uv run --with polars my_script.py
 ```
 
-This is pretty neat!
-
-For uv's next trick, let's fire up a Jupyter lab server in a disposable virtual environment with:
+You can even fire up a Jupyter lab server in a disposable virtual environment with:
 
 ```bash
 uv run --with jupyter jupyter lab
 ```
 
-I wish this was a thing when I was learning Python and teaching aspiring data scientists.
+I wish this was a thing when I was learning Python.
 
-# Goal: run a file hosted on the web
+# Goal: run a file hosted on the web or in the clipboard
 
-If your file paths are set up correctly,uv will auto-install the dependencies for a script and run them in a temporary virtual environment.
+If your file paths are set up correctly, uv will auto-install the dependencies in a script and run them in a temporary virtual environment.
 
 ```bash
 uv run https://example.com/my_script.py
 ```
 
-You can do the same thing with code in your clipboard on a Mac:
+You can do the same thing with code in your clipboard on a Mac with this command:
 
 ```bash
 pbpaste | uv run - 
 ```
 
-Both of the above examples were problematic for me because of PATH issues with old `uv` versions.
-
 ## Goal: project management
 
-uv also solves pain points for project management. It helps you quickly start a project and provides handy commands for development.
+uv also solves pain points for project management. It helps you quickly start a project and provides handy commands for development. Create a project:
 
 ```bash
 uv init project1
 ```
 
 This scaffolds a project with a `pyproject.toml` file, a `hello.py` file, and a `README.md` file.
-It also adds`.git` and `.gitignore` files for version control.
+It also adds`.git` and `.gitignore` files for version control. Convenient!
 
 You can declare your Python version as well as your dependencies and project metadata in `pyproject.toml`. This further helps with reproducibility.
 
@@ -246,14 +241,16 @@ Run the script in your project with:
 uv run hello.py
 ```
 
-Then uv automatically creates a virtual environment with a `.venv` file and creates a lock file with all pinned versions of your dependencies and their dependencies.  
+Then, uv will automatically create a virtual environment with a `.venv` file and create a lock file with the pinned versions of your dependencies and their dependencies.  
 
-Add and remove packages to your project like this:
+Add and remove packages for your project like this:
 
 ```bash
 uv add polars
 uv remove polars
 ```
+
+If you want to use the project you created for publishing packages, uv has your back.
 
 ## Goal: publish your package
 
@@ -265,24 +262,23 @@ uv build
 
 Then, you'll see `project1.egg-info` and `dist` directories in your project.
 
-Once you've set up your PyPI credentials, you can publish your package to a PyPI-compatible index with:
+Once you've set up your PyPI credentials, you can even publish your package to a PyPI-compatible index with:
 
 ```bash
 uv publish
 ```
 
-uv provides handy commands for working with your package.
+uv provides additional handy commands for working with your package that you can see in the [docs](https://docs.astral.sh/uv/guides/package).
 
 ## Conclusion
+Although we've covered a lot of uv's functionality, we didn't dig into [tools](https://docs.astral.sh/uv/guides/tools/) and the related `uvx` command, but we might in a future post, so keep an eye out.
 
-uv is the future and the present of Python virtual environment and package management.
-
-If you haven't yet tried uv, give it a chance to speed up your development workflows and save time running your CI/CD pipelines.
-
-At Prefect, we're using uv in more and more places and reaping the benefits.
+At Prefect we're increasingly using uv and seeing the benefits. If you haven't yet tried uv, give it a whirl and I bet you'll see faster development and save time running your CI/CD pipelines.
 
 ### Additional resources
 
-- [uv docs](https://docs.astral.sh/uv/)
+Want to keep exploring? Check out these resources:
+
+- [uv docs](https://docs.astral.sh/uv)
 - [Good YouTube video](https://www.youtube.com/watch?v=goIwKjsEPOI) on uv with emphasis on its project management features and the source of the stat above on uv's popularity.
 - [Nice uv guide](https://www.saaspegasus.com/guides/uv-deep-dive/).
