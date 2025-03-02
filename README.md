@@ -1,0 +1,1 @@
+This repo contains an example script that accompanies the blog post [What Data Professionals Need to Know About uv](https://www.prefect.io/blog/what-data-professionals-need-to-know-about-uv).
